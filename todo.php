@@ -1,19 +1,23 @@
 <?php
 //total array yang disiapkan untuk disimpan
 $todos  = []; 
-//membaca file todo.txt
-$file   =   file_get_contents('todo.txt');
-//mengubah format serialize menjadi array
-$todos  =   unserialize($file);
+//melakukan pengecekan apakah file todo.txt ditemukan
+if(file_exists('todo.txt'))
+{
+    //membaca file todo.txt
+    $file   =   file_get_contents('todo.txt');
+    //mengubah format serialize menjadi array
+    $todos  =   unserialize($file);
+}
 //Jika ditemukan todo yang dikirim melalui methode POST
 if(isset($_POST['todo']))
 {
-    $data   = $_POST['todo']; // mengabil data yang di input pada form
+    $data   = $_POST['todo']; // data yang dipilih pada form
     $todos[]=[
                 'todo'  => $data,
                 'status'=>0
               ];
-    $daftar_belanja = serialize($todos);
+    $daftar_belanja=serialize($todos);
     file_put_contents('todo.txt',$daftar_belanja);
 }
 ?>
@@ -24,19 +28,12 @@ if(isset($_POST['todo']))
 <button type="submit">Simpan</button>
 </form>
 <ul>
+    <ul>
+    <?php foreach($todos as $key=>$value): ?>
     <li>
         <input type="checkbox" name="todo">
-        <label> Todo 1</label>
+        <label><?php echo $value['todo'];?></label>
         <a href='#'>hapus</a>
     </li>
-    <li>
-        <input type="checkbox" name="todo">
-        <label> Todo 1</label>
-        <a href='#'>hapus</a>
-    </li>
-    <li>
-        <input type="checkbox" name="todo">
-        <label> Todo 1</label>
-        <a href='#'>hapus</a>
-    </li>
+<?php endforeach; ?>
 </ul>
