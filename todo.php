@@ -19,7 +19,20 @@ if(isset($_POST['todo']))
               ];
     $daftar_belanja=serialize($todos);
     file_put_contents('todo.txt',$daftar_belanja);
+    //redirect halaman
+    header('location:todo.php');
 }
+//jika ditemukan $_GET['status']
+if(isset($_GET['status']))
+{
+   //ubah status
+    $todos[$_GET['key']]['status']=$_GET['status'];
+    $daftar_belanja=serialize($todos);
+    file_put_contents('todo.txt',$daftar_belanja);
+    //redirect halaman
+    header('location:todo.php');
+}
+print_r($todos);
 ?>
 <h1>Todo App</h1>
 <form action="" method="POST">
@@ -31,9 +44,21 @@ if(isset($_POST['todo']))
     <ul>
     <?php foreach($todos as $key=>$value): ?>
     <li>
-        <input type="checkbox" name="todo">
-        <label><?php echo $value['todo'];?></label>
+        <input type="checkbox" name="todo" onclick="window.location.href='todo.php?status=<?php echo($value['status']==1)? '0': '1'; ?>&key=<?php echo $key;?>'";
+        <?php if($value['status']==1)echo 'checked' ?>>
+        <label>
+        <?php
+            if($value['status']==1)
+            {
+               echo '<del>'.$value['todo'].'</del>'; 
+            }
+            else
+            {
+                echo $value['todo'];
+            }
+            ?>
+</label>
         <a href='#'>hapus</a>
     </li>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 </ul>
